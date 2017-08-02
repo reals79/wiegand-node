@@ -5,11 +5,7 @@ This module uses interrupt pins from Raspberry Pi to read the pulses from Wiegan
 
 ## Installation 
 
-In a folder your project:
-
-	git clone https://github.com/reals79/wiegand-node wiegand-node
-	cd wiegand-node
-	npm install
+	npm install wiegand-node
     
 ### Example
 <pre><code>
