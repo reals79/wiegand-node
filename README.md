@@ -11,7 +11,7 @@ This module uses interrupt pins from Raspberry Pi to read the pulses from Wiegan
 <pre><code>
 "use strict";
 
-var Wiegand = require('./wiegand-node');
+var Wiegand = require('wiegand-node');
 
 var pinD0 = 4,  //DATA0 of Wiegand connects to RPi GPIO04 (Pin 7)
     pinD1 = 17; //DATA1 of Wiegand connects to RPi GPIO17 (Pin 11)
