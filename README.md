@@ -3,6 +3,12 @@ The Wiegand interface is a de facto standard commonly used to connect a card rea
 Wiegand interface has the ability to transmit signal over long distance with a simple 3 wires connection. 
 This module uses interrupt pins from Raspberry Pi to read the pulses from Wiegand interface and return the code and type of the Wiegand.
 
+## Installation 
+
+In a folder your project:
+
+	git clone https://github.com/reals79/wiegand-node wiegand-node
+    
 ### Example
 <pre><code>
 "use strict";
@@ -26,4 +32,4 @@ setInterval(getCode); //Infinite loop
 
 ## Credits
 
-Based on the [Wiegand-Protocol-Library-for-Arduino][].
+Based on the [Wiegand-Protocol-Library-for-Arduino](https://github.com/monkeyboard/Wiegand-Protocol-Library-for-Arduino).
