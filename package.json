@@ -1,17 +1,17 @@
 {
-    "name": "wiegand-node",
-    "version": "0.0.1",
-    "description": "Wiegand 26 and Wiegand 34 Protocol Module for Node.js",
-    "main": "index.js",
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "keywords": [
-        "wiegand"
-    ],
-    "author": "Reals <support@realsweb.com>",
-    "license": "ISC",
-    "dependencies": {
-        "onoff": "1.1.5"
-    }
+  "name": "wiegand-node",
+  "version": "0.1.0",
+  "description": "Wiegand 26 and Wiegand 34 Protocol Module for Node.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "wiegand"
+  ],
+  "author": "Reals <support@realsweb.com>",
+  "license": "ISC",
+  "dependencies": {
+    "onoff": "1.1.5"
+  }
 }
