@@ -1,6 +1,6 @@
 {
   "name": "wiegand-node",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Wiegand 26 and Wiegand 34 Protocol Module for Node.js",
   "main": "index.js",
   "scripts": {

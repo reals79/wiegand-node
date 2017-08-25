@@ -1,50 +1,20 @@
 "use strict";
 
 var Gpio = require('onoff').Gpio;
-var _lastWiegand = 0,
-    _cardTempHigh = 0,
-    _cardTemp = 0,
-    _code = 0,
-    _wiegandType = 0,
-    _bitCount = 0,
-    d0, d1;
 
 function Wiegand(pinD0, pinD1)
 {
-    _lastWiegand = 0,
-    _cardTempHigh = 0,
-    _cardTemp = 0,
-    _code = 0,
-    _wiegandType = 0,
-    _bitCount = 0;
+    this._lastWiegand = 0,
+    this._cardTempHigh = 0,
+    this._cardTemp = 0,
+    this._code = 0,
+    this._wiegandType = 0,
+    this._bitCount = 0;
 
-    d0 = new Gpio(pinD0, 'in', 'falling'),
-    d1 = new Gpio(pinD1, 'in', 'falling'),
+    this.d0 = new Gpio(pinD0, 'in', 'falling');
+    this.d1 = new Gpio(pinD1, 'in', 'falling');
 
-    interrupts();
-}
-
-function noInterrupts()
-{
-    d0.unwatch();
-    d1.unwatch();
-}
-
-function interrupts()
-{
-    d0.watch(function (err, value) {
-      if (err) {
-        //throw err;
-      }
-      ReadD0();
-    });
-
-    d1.watch(function (err, value) {
-      if (err) {
-        //throw err;
-      }
-      ReadD1();
-    });
+    this.interrupts();
 }
 
 function millis()
@@ -52,38 +22,62 @@ function millis()
     return new Date().getTime();
 }
 
-function ReadD0()
+Wiegand.prototype.ReadD0 = function()
 {
-    _bitCount++;                // Increament bit count for Interrupt connected to D0
-    if (_bitCount>31)           // If bit count more than 31, process high bits
+    this._bitCount++;                // Increament bit count for Interrupt connected to D0
+    if (this._bitCount>31)           // If bit count more than 31, process high bits
     {
-        _cardTempHigh |= ((0x80000000 & _cardTemp)>>31);    //  shift value to high bits
-        _cardTempHigh <<= 1;
-        _cardTemp <<= 1;
+        this._cardTempHigh |= ((0x80000000 & this._cardTemp)>>31);    //  shift value to high bits
+        this._cardTempHigh <<= 1;
+        this._cardTemp <<= 1;
     }
     else
     {
-        _cardTemp <<= 1;        // D0 represent binary 0, so just left shift card data
+        this._cardTemp <<= 1;        // D0 represent binary 0, so just left shift card data
     }
-    _lastWiegand = millis();    // Keep track of last wiegand bit received
+    this._lastWiegand = millis();    // Keep track of last wiegand bit received
 }
 
-function ReadD1()
+Wiegand.prototype.ReadD1 = function()
 {
-    _bitCount ++;               // Increment bit count for Interrupt connected to D1
-    if (_bitCount>31)           // If bit count more than 31, process high bits
+    this._bitCount ++;               // Increment bit count for Interrupt connected to D1
+    if (this._bitCount>31)           // If bit count more than 31, process high bits
     {
-        _cardTempHigh |= ((0x80000000 & _cardTemp)>>31);    // shift value to high bits
-        _cardTempHigh <<= 1;
-        _cardTemp |= 1;
-        _cardTemp <<=1;
+        this._cardTempHigh |= ((0x80000000 & this._cardTemp)>>31);    // shift value to high bits
+        this._cardTempHigh <<= 1;
+        this._cardTemp |= 1;
+        this._cardTemp <<=1;
     }
     else
     {
-        _cardTemp |= 1;         // D1 represent binary 1, so OR card data with 1 then
-        _cardTemp <<= 1;        // left shift card data
+        this._cardTemp |= 1;         // D1 represent binary 1, so OR card data with 1 then
+        this._cardTemp <<= 1;        // left shift card data
     }
-    _lastWiegand = millis();    // Keep track of last wiegand bit received
+    this._lastWiegand = millis();    // Keep track of last wiegand bit received
+}
+
+Wiegand.prototype.noInterrupts = function()
+{
+    this.d0.unwatch();
+    this.d1.unwatch();
+}
+
+Wiegand.prototype.interrupts = function()
+{
+    var that = this;
+    this.d0.watch(function (err, value) {
+      if (err) {
+        //throw err;
+      }
+      that.ReadD0();
+    });
+
+    this.d1.watch(function (err, value) {
+      if (err) {
+        //throw err;
+      }
+      that.ReadD1();
+    });
 }
 
 function GetCardId(codehigh, codelow, bitlength)
@@ -114,68 +108,68 @@ function translateEnterEscapeKeyPress(originalKeyPress) {
     }
 }
 
-function DoWiegandConversion()
+Wiegand.prototype.DoWiegandConversion = function()
 {
     var cardID;
     var sysTick = millis();
     
-    if ((sysTick - _lastWiegand) > 25)                              // if no more signal coming through after 25ms
+    if ((sysTick - this._lastWiegand) > 25)                              // if no more signal coming through after 25ms
     {
-        if ((_bitCount == 24) || (_bitCount == 26) || (_bitCount == 32) || (_bitCount == 34) || (_bitCount == 8) || (_bitCount == 4))   // bitCount for keypress=4 or 8, Wiegand 26=24 or 26, Wiegand 34=32 or 34
+        if ((this._bitCount == 24) || (this._bitCount == 26) || (this._bitCount == 32) || (this._bitCount == 34) || (this._bitCount == 8) || (this._bitCount == 4))   // bitCount for keypress=4 or 8, Wiegand 26=24 or 26, Wiegand 34=32 or 34
         {
-            _cardTemp >>= 1;            // shift right 1 bit to get back the real value - interrupt done 1 left shift in advance
-            if (_bitCount > 32)           // bit count more than 32 bits, shift high bits right to make adjustment
-                _cardTempHigh >>= 1;    
+            this._cardTemp >>= 1;            // shift right 1 bit to get back the real value - interrupt done 1 left shift in advance
+            if (this._bitCount > 32)           // bit count more than 32 bits, shift high bits right to make adjustment
+                this._cardTempHigh >>= 1;    
 
-            if (_bitCount == 8)       // keypress wiegand with integrity
+            if (this._bitCount == 8)       // keypress wiegand with integrity
             {
                 // 8-bit Wiegand keyboard data, high nibble is the "NOT" of low nibble
                 // eg if key 1 pressed, data=E1 in binary 11100001 , high nibble=1110 , low nibble = 0001 
-                highNibble = (_cardTemp & 0xf0) >> 4;
-                lowNibble = (_cardTemp & 0x0f);
-                _wiegandType = _bitCount;                 
-                _bitCount = 0;
-                _cardTemp = 0;
-                _cardTempHigh = 0;
+                highNibble = (this._cardTemp & 0xf0) >> 4;
+                lowNibble = (this._cardTemp & 0x0f);
+                this._wiegandType = this._bitCount;                 
+                this._bitCount = 0;
+                this._cardTemp = 0;
+                this._cardTempHigh = 0;
                 
                 if (lowNibble == (~highNibble & 0x0f))      // check if low nibble matches the "NOT" of high nibble.
                 {
-                    _code = translateEnterEscapeKeyPress(lowNibble);
+                    this._code = translateEnterEscapeKeyPress(lowNibble);
                     return true;
                 }
 
                 // TODO: Handle validation failure case!
             }
-            else if (4 == _bitCount) {
+            else if (4 == this._bitCount) {
                 // 4-bit Wiegand codes have no data integrity check so we just
                 // read the LOW nibble.
-                _code = translateEnterEscapeKeyPress(_cardTemp & 0x0000000F);
+                this._code = translateEnterEscapeKeyPress(this._cardTemp & 0x0000000F);
 
-                _wiegandType = _bitCount;
-                _bitCount = 0;
-                _cardTemp = 0;
-                _cardTempHigh = 0;
+                this._wiegandType = this._bitCount;
+                this._bitCount = 0;
+                this._cardTemp = 0;
+                this._cardTempHigh = 0;
 
                 return true;
             }
             else        // wiegand 26 or wiegand 34
             {
-                cardID = GetCardId(_cardTempHigh, _cardTemp, _bitCount);
-                _wiegandType = _bitCount;
-                _bitCount = 0;
-                _cardTemp = 0;
-                _cardTempHigh = 0;
-                _code = cardID;
+                cardID = GetCardId(this._cardTempHigh, this._cardTemp, this._bitCount);
+                this._wiegandType = this._bitCount;
+                this._bitCount = 0;
+                this._cardTemp = 0;
+                this._cardTempHigh = 0;
+                this._code = cardID;
                 return true;
             }
         }
         else
         {
             // well time over 25 ms and bitCount !=8 , !=26, !=34 , must be noise or nothing then.
-            _lastWiegand = sysTick;
-            _bitCount = 0;            
-            _cardTemp = 0;
-            _cardTempHigh = 0;
+            this._lastWiegand = sysTick;
+            this._bitCount = 0;            
+            this._cardTemp = 0;
+            this._cardTempHigh = 0;
             return false;
         }   
     }
@@ -187,21 +181,21 @@ function rfid_formatter(value)
 {
     var str_value = value.toString();
     while (str_value.length < 10)
-        str_value = "0" + str_value;
+        str_value = '0' + str_value;
     return str_value;
 }
 
 Wiegand.prototype.available = function()
 {
-    noInterrupts();
-    var ret = DoWiegandConversion();
-    interrupts();
+    this.noInterrupts();
+    var ret = this.DoWiegandConversion();
+    this.interrupts();
     return ret;
 }
 
 Wiegand.prototype.getCode = function()
 {
-    return rfid_formatter(_code);
+    return rfid_formatter(this._code);
 }
 
 module.exports = Wiegand;
