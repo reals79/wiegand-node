@@ -1,6 +1,6 @@
 {
   "name": "wiegand-node",
-  "version": "0.2.1",
+  "version": "1.0.0",
   "description": "Wiegand 26 and Wiegand 34 Protocol Module for Node.js",
   "main": "index.js",
   "scripts": {
@@ -12,7 +12,7 @@
   "author": "Reals <support@realsweb.com>",
   "license": "ISC",
   "dependencies": {
-    "onoff": "1.1.5"
+    "onoff": "3.2.1"
   },
   "repository": {
     "type": "git",
