@@ -123,7 +123,7 @@ class Wiegand extends EventEmitter{
                 this._bitCount = 0;
                 this._cardTemp = 0;
                 this._cardTempHigh = 0;
-                return this.emit('value');
+                return this.emit('data');
             } else { //must be noise or nothing...
                 this._bitCount = 0;            
                 this._cardTemp = 0;
