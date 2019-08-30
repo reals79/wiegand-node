@@ -18,7 +18,7 @@ var pinD0 = 4,  //DATA0 of Wiegand connects to RPi GPIO04 (Pin 7)
 
 var wg = new Wiegand(pinD0, pinD1);
 
-wg.on('value', () => {
+wg.on('data', () => {
     let wiegandBits = wg._wiegandType;
     let rawData = wg._rawData;
     let rfidFormat = wg.rfid_formatter;
