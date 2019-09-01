@@ -11,22 +11,22 @@ This module uses interrupt pins from Raspberry Pi to read the pulses from Wiegan
 <pre><code>
 "use strict";
 
-var Wiegand = require('wiegand-node');
+const Wiegand = require('wiegand-node');
 
 var pinD0 = 4,  //DATA0 of Wiegand connects to RPi GPIO04 (Pin 7)
     pinD1 = 17; //DATA1 of Wiegand connects to RPi GPIO17 (Pin 11)
 
-var wg = new Wiegand(pinD0, pinD1);
-
-wg.on('data', () => {
-    let wiegandBits = wg._wiegandType;
-    let rawData = wg._rawData;
-    let rfidFormat = wg.rfid_formatter;
-    console.log( wiegandBits, rawData,  rfidFormat);
+const w = new Wiegand({ d0: pinD0, d1: pinD1 });
+w.begin();
+w.on('reader', (idDec, idRFID, idHex) => {
+  console.log(idDec); // RAW data
+  
+  console.log(idRFID); // EM format
+  
+  console.log(idHex); // Mifare format
 });
 
 </code></pre>
 
 ## Credits
 
-Based on the [Wiegand-Protocol-Library-for-Arduino](https://github.com/monkeyboard/Wiegand-Protocol-Library-for-Arduino).
