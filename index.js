@@ -76,6 +76,9 @@ class Wiegand extends EventEmitter {
       let dataRFID = _rfid_format(dataDec);
       this.emit('reader', dataDec, dataRFID, dataHex)
     }
+    else {
+      this.emit('reader_failed_parity', parseInt(data.slice(1, -1).join(''), 2))
+    }
   }
   /**
    *
