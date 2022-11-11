@@ -38,5 +38,16 @@ const w = new Wiegand(
 );
 </code></pre>
 
-## Credits
+#### Available Watchers
+<pre><code>
+w.on('reader', (idDec, idRFID, idHex) => {
+    // stuff
+});
+w.on('reader_failed_parity', (data) => {
+    // stuff
+});
+</code></pre>
 
+## Contributors
+[Reals](https://github.com/reals79)\
+[Elompenta](https://github.com/Elompenta)
