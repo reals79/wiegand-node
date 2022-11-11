@@ -25,7 +25,17 @@ w.on('reader', (idDec, idRFID, idHex) => {
   
   console.log(idHex); // Mifare format
 });
+</code></pre>
 
+#### Settings
+<pre><code>
+const w = new Wiegand(
+    { 
+        d0: int, // the number of your GPIO PIN. This means eg. "4" for "GPIO04", not 7 from "Pin 7" | default 4
+        d1: int  // the number of your GPIO PIN. This means eg. "17" for "GPIO17", not 11 from "Pin 11" | default 11
+        debug: bool // enable debug console output | default false 
+    }
+);
 </code></pre>
 
 ## Credits

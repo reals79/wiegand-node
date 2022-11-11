@@ -37,7 +37,7 @@ class Wiegand extends EventEmitter {
     super()
     this.data = []
     this.timeout = null
-
+    this.debug = options.debug || false
     this.gpio = { d0: options.d0 || 4, d1: options.d1 || 17 }
 
     this.d0 = new Gpio(this.gpio.d0, 'in', 'rising')
@@ -57,6 +57,7 @@ class Wiegand extends EventEmitter {
           this.emit('keypad', parseInt(data.join(''), 2))
           break
         default:
+          if (this.debug) console.log('collected, but ignored data...', data);
           break
       }
     })
@@ -93,6 +94,10 @@ class Wiegand extends EventEmitter {
     }
     if (!(oddParity.filter(fn).length & 1)) {
       okay = false
+    }
+    if (!okay && this.debug) {
+      console.log('parity check failed');
+      console.log(data);
     }
     return okay
   }
