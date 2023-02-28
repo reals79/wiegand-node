@@ -25,8 +25,29 @@ w.on('reader', (idDec, idRFID, idHex) => {
   
   console.log(idHex); // Mifare format
 });
-
 </code></pre>
 
-## Credits
+#### Settings
+<pre><code>
+const w = new Wiegand(
+    { 
+        d0: int, // the number of your GPIO PIN. This means eg. "4" for "GPIO04", not 7 from "Pin 7" | default 4
+        d1: int  // the number of your GPIO PIN. This means eg. "17" for "GPIO17", not 11 from "Pin 11" | default 11
+        debug: bool // enable debug console output | default false 
+    }
+);
+</code></pre>
 
+#### Available Watchers
+<pre><code>
+w.on('reader', (idDec, idRFID, idHex) => {
+    // stuff
+});
+w.on('reader_failed_parity', (data) => {
+    // stuff
+});
+</code></pre>
+
+## Contributors
+[Reals](https://github.com/reals79)\
+[Elompenta](https://github.com/Elompenta)
