@@ -46,18 +46,21 @@ class Wiegand extends EventEmitter {
     this.on('data', (data) => {
       switch (true) {
         case data.length >= 34:
+          if (this.debug) console.log('collected data (length: '+data.length+')...', data);
           data = data.slice(0, 34)
           this._emitReader(data)
           break
         case data.length >= 26:
+          if (this.debug) console.log('collected data (length: '+data.length+')...', data);
           data = data.slice(0, 26)
           this._emitReader(data)
           break
         case data.length === 4:
+          if (this.debug) console.log('collected data (length: '+data.length+')...', data);
           this.emit('keypad', parseInt(data.join(''), 2))
           break
         default:
-          if (this.debug) console.log('collected, but ignored data...', data);
+          if (this.debug) console.log('collected, but ignored data (length: '+data.length+')...', data);
           break
       }
     })
