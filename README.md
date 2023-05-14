@@ -24,6 +24,8 @@ w.on('reader', (idDec, idRFID, idHex) => {
   console.log(idRFID); // EM format
   
   console.log(idHex); // Mifare format
+  
+  w.stop() // Stops reading after first success
 });
 </code></pre>
 
