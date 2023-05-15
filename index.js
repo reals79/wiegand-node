@@ -2,7 +2,7 @@
 
 const EventEmitter = require('events')
 const Gpio = require('onoff').Gpio
-const TIMEOUT = parseInt(process.env.WIEGAND_TIMEOUT) || 25
+const TIMEOUT = parseInt(process.env.WIEGAND_TIMEOUT) || 50
 
 function _reversHex (data) {
   let da = Buffer.from(data, 'hex');
